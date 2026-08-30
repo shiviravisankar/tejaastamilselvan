@@ -222,17 +222,27 @@ body{
   align-items:center;
 }
 
+/* Corners are baked into the source PNGs, so we never crop them —
+   object-fit:contain scales each image down to fit a shared box
+   height without slicing into the baked-in rounded corners.
+   The fixed aspect-ratio is what actually restricts both cards
+   to the same size regardless of each PNG's native dimensions. */
 .project__media{
-  border-radius:var(--radius-lg); /* safety clip only, in case a PNG has hard square corners */
-  overflow:hidden;
+  aspect-ratio: 4 / 3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
   will-change:transform;
   transition:transform var(--dur-med) var(--ease-out);
 }
 
 .project__img{
   width:100%;
-  height:auto;
+  height:100%;
   display:block;
+  object-fit:contain;
+  object-position:center;
 }
 
 @media (hover:hover) and (pointer:fine){
@@ -295,14 +305,24 @@ body{
   cursor:default;
 }
 
-/* -- two-up grid -- */
+/* -- two-up grid --
+   minmax(0, 1fr) instead of bare 1fr: by default a grid track's
+   minimum width is "auto", which respects the min-content size of
+   whatever's inside it. If one card's heading/copy needs more
+   intrinsic width than the other, that column silently grows past
+   its 50% share and the other shrinks — which is what was making
+   the two project cards render at visibly different sizes even
+   though "1fr 1fr" looks like it should split evenly. Pinning the
+   track minimum to 0 forces a true equal split regardless of
+   content length. */
 .project-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
   gap:clamp(28px, 3vw, 44px);
 }
 .project--card{
   display:flex; flex-direction:column; gap:24px;
+  min-width:0; /* allow the card to actually shrink to its grid track */
 }
 
 /* staggered entrance delays */
