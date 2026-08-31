@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grouppal Merchant Portal — Tejaas Tamilselvan</title>
+<meta name="description" content="Case study: scaling merchant operations without increasing complexity — Grouppal, by Tejaas Tamilselvan." />
+
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   RESET (matches assets/reset.css)
+   ============================================================ */
+*, *::before, *::after{ box-sizing:border-box; }
+*{ margin:0; padding:0; font:inherit; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; -moz-tab-size:4; tab-size:4; }
+body{ min-height:100vh; line-height:1.5; -webkit-font-smoothing:antialiased; text-rendering:optimizeSpeed; }
+img, picture, video, canvas, svg{ display:block; max-width:100%; }
+iframe{ border:0; }
+ul, ol{ list-style:none; }
+a{ color:inherit; text-decoration:none; -webkit-tap-highlight-color:transparent; }
+button, input, textarea, select{ background:none; border:none; color:inherit; }
+button{ cursor:pointer; }
+button:disabled, [aria-disabled='true']{ cursor:default; }
+table{ border-collapse:collapse; border-spacing:0; }
+h1,h2,h3,h4,h5,h6{ font-size:inherit; font-weight:inherit; }
+p,h1,h2,h3,h4,h5,h6{ overflow-wrap:break-word; }
+fieldset{ border:0; }
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration:0.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important; scroll-behavior:auto !important;
+  }
+}
+
+/* ============================================================
+   TOKENS (matches assets/styles.css :root exactly, extended
+   with dark-section + strategy-panel tokens for this page only)
+   ============================================================ */
+:root{
+  --ink:            #0A0A0A;
+  --ink-soft:       #565656;
+  --ink-faint:      #9A9A9A;
+  --paper:          #FFFFFF;
+  --line:           rgba(10,10,10,0.08);
+
+  --accent:         #4A3FE0;
+  --accent-ink:     #2E239B;
+  --accent-tint:    #ECEAFC;
+  --accent-shadow:  rgba(74,63,224,0.28);
+
+  --blue-bg:        #CCE1F6;
+  --blue-tag-bg:    #E6F0FB;
+  --blue-tag-ink:   #2B6499;
+  --blue-shadow:    rgba(62,124,184,0.26);
+
+  --lavender-bg:    #DAD9F8;
+  --lavender-tag-bg:var(--accent-tint);
+  --lavender-tag-ink:var(--accent-ink);
+  --lavender-shadow:var(--accent-shadow);
+
+  --pink-bg:        #F6DCE7;
+  --pink-tag-bg:    #FBEAF1;
+  --pink-tag-ink:   #A3446B;
+  --pink-shadow:    rgba(200,90,140,0.26);
+
+  --footer-bg:      #0A0A0A;
+  --footer-ink:     #F5F5F5;
+  --footer-ink-dim: #8A8A8A;
+
+  --track-hero:     -0.03em;
+  --track-h2:       -0.02em;
+  --track-body:     -0.011em;
+  --track-label:    0.02em;
+
+  --ease-out:       cubic-bezier(.16,1,.3,1);
+  --ease-standard:  cubic-bezier(.4,0,.2,1);
+  --dur-fast:       160ms;
+  --dur-med:        420ms;
+  --dur-slow:       720ms;
+
+  --radius-lg:      28px;
+  --radius-md:      16px;
+  --radius-sm:      10px;
+  --radius-pill:    999px;
+
+  /* case-study-only extensions, same hue family as --blue-* */
+  --deep-bg:        #0E1116;
+  --deep-card:      #171B21;
+  --deep-line:      rgba(245,245,245,0.09);
+  --deep-ink-dim:   #9BA0A6;
+}
+
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Switzer', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight:400;
+  line-height:1.4;
+  overflow-x:hidden;
+}
+
+.grain{
+  position:fixed; inset:0; pointer-events:none; z-index:999;
+  opacity:0.025; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+
+.reveal{
+  opacity:0; transform:translateY(28px);
+  transition:opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+.reveal.is-visible{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+/* ============================================================
+   NAV (matches .nav exactly, "Back" swapped in for "Work")
+   ============================================================ */
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:32px clamp(24px, 5vw, 72px) 0;
+  max-width:1440px; margin:0 auto;
+}
+.nav__name{ font-weight:500; font-size:15px; letter-spacing:var(--track-label); }
+.nav__links{ display:flex; align-items:center; gap:clamp(20px, 3vw, 36px); }
+.nav__link{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:14px; font-weight:500; color:var(--ink-soft);
+  letter-spacing:var(--track-label);
+  transition:color var(--dur-fast) var(--ease-standard);
+  padding:4px 2px; position:relative;
+}
+.nav__link::after{
+  content:''; position:absolute; left:0; right:100%; bottom:-2px; height:1px;
+  background:var(--ink); transition:right var(--dur-med) var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .nav__link:hover{ color:var(--ink); }
+  .nav__link:hover::after{ right:0; }
+}
+.nav__link:active{ transform:translateY(1px); }
+.nav__link--icon svg{ flex-shrink:0; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  padding:clamp(48px, 8vw, 96px) clamp(24px, 5vw, 72px) clamp(40px, 6vw, 64px);
+  max-width:1440px; margin:0 auto;
+}
+.hero__eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:500; color:var(--ink-soft);
+  letter-spacing:var(--track-label);
+  margin-bottom:28px;
+}
+.hero__eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+.hero__statement{
+  font-size:clamp(30px, 4.6vw, 58px);
+  font-weight:400; letter-spacing:var(--track-hero); line-height:1.16;
+  width:88%; color:var(--ink); text-wrap:balance;
+}
+@media (max-width:900px){ .hero__statement{ width:100%; } }
+.hero__statement .word{
+  display:inline-block; opacity:0; filter:blur(6px); transform:translateY(14px);
+  animation:revealWord var(--dur-slow) var(--ease-out) forwards;
+}
+@keyframes revealWord{ to{ opacity:1; filter:blur(0); transform:translateY(0); } }
+@media (prefers-reduced-motion: reduce){
+  .hero__statement .word{ animation:none; opacity:1; filter:none; transform:none; }
+}
+.hero__meta{
+  display:flex; gap:clamp(28px,5vw,56px); flex-wrap:wrap;
+  margin-top:44px; padding-top:28px; border-top:1px solid var(--line);
+  opacity:0; animation:fadeUp var(--dur-slow) var(--ease-out) 900ms forwards;
+}
+@keyframes fadeUp{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+@media (prefers-reduced-motion: reduce){ .hero__meta{ animation:none; opacity:1; } }
+.hero__meta-item .label{ font-size:11.5px; color:var(--ink-faint); letter-spacing:var(--track-label); text-transform:uppercase; margin-bottom:6px; }
+.hero__meta-item .value{ font-size:14.5px; font-weight:500; letter-spacing:var(--track-body); }
+
+/* ============================================================
+   SECTION SHELL
+   ============================================================ */
+.section{
+  padding:clamp(56px,7vw,96px) clamp(24px,5vw,72px);
+  max-width:1440px; margin:0 auto;
+}
+.section--tight{ padding-top:0; }
+.section__head{ margin-bottom:clamp(36px,4vw,52px); }
+.section__label{ font-size:12.5px; font-weight:500; color:var(--ink-faint); letter-spacing:var(--track-label); text-transform:uppercase; margin-bottom:10px; }
+.section__title{ font-size:clamp(24px,2.8vw,36px); font-weight:600; letter-spacing:var(--track-h2); line-height:1.2; max-width:640px; }
+
+/* ============================================================
+   CARD PRIMITIVE (echoes .tag / .project__body language)
+   ============================================================ */
+.card-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(16px,2vw,20px); }
+@media (max-width:860px){ .card-grid{ grid-template-columns:1fr; } }
+.info-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:28px 26px;
+}
+.info-card .tag{
+  font-size:12.5px; font-weight:500; letter-spacing:var(--track-label);
+  padding:6px 12px; border-radius:var(--radius-pill);
+  background:var(--blue-tag-bg); color:var(--blue-tag-ink);
+  display:inline-block; margin-bottom:16px;
+}
+.info-card p{ font-size:15.5px; line-height:1.62; letter-spacing:var(--track-body); color:var(--ink-soft); }
+.info-card p b{ color:var(--ink); font-weight:600; }
+
+/* ---- role & team ---- */
+.role-grid{ display:grid; grid-template-columns:1fr 1.35fr; gap:clamp(32px,4vw,56px); align-items:start; }
+@media (max-width:860px){ .role-grid{ grid-template-columns:1fr; } }
+.role-grid h3{ font-size:clamp(20px,2vw,26px); font-weight:600; letter-spacing:var(--track-h2); }
+.role-desc p{ font-size:15.5px; line-height:1.65; letter-spacing:var(--track-body); color:var(--ink-soft); margin-bottom:24px; }
+.role-desc p b{ color:var(--ink); font-weight:600; }
+.team-row{ display:flex; gap:14px; flex-wrap:wrap; }
+.team-card{ flex:1; min-width:150px; border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 18px; }
+.team-card .avatar{ width:32px; height:32px; border-radius:50%; margin-bottom:12px; background:linear-gradient(135deg, var(--accent), var(--accent-ink)); }
+.team-card .name{ font-size:14px; font-weight:600; letter-spacing:var(--track-body); margin-bottom:2px; }
+.team-card .role{ font-size:12.5px; color:var(--ink-faint); }
+
+/* ---- discovery ---- */
+.discovery-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:860px){ .discovery-grid{ grid-template-columns:1fr; } }
+.discovery-card{ border-radius:var(--radius-lg); padding:34px 32px; background:var(--blue-bg); }
+.discovery-card.alt{ background:var(--lavender-bg); }
+.discovery-card .icon{
+  width:42px; height:42px; border-radius:var(--radius-sm); background:rgba(255,255,255,0.55);
+  display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+  font-size:11px; font-weight:600; letter-spacing:var(--track-label); color:var(--ink);
+}
+.discovery-card h4{ font-size:19px; font-weight:600; letter-spacing:var(--track-h2); margin-bottom:12px; }
+.discovery-card p{ font-size:15px; line-height:1.68; letter-spacing:var(--track-body); color:rgba(10,10,10,0.68); }
+
+/* ============================================================
+   INSIGHTS — DARK
+   ============================================================ */
+.insights{
+  background:var(--deep-bg); color:var(--footer-ink);
+  padding:clamp(56px,7vw,96px) clamp(24px,5vw,72px);
+}
+.insights .section__label{ color:var(--deep-ink-dim); }
+.insights .section__title{ color:var(--footer-ink); max-width:640px; }
+.insights-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; margin-top:44px; }
+@media (max-width:900px){ .insights-grid{ grid-template-columns:1fr; } }
+.insight-card{ background:var(--deep-card); border:1px solid var(--deep-line); border-radius:var(--radius-md); overflow:hidden; }
+.insight-mock{ aspect-ratio:4/3; padding:16px; }
+.insight-mock-inner{ height:100%; background:var(--paper); border-radius:var(--radius-sm); padding:14px; display:flex; flex-direction:column; gap:8px; }
+.mock-bar{ height:8px; border-radius:3px; background:var(--line); }
+.mock-bar.blue{ background:var(--accent); width:55%; }
+.mock-bar.short{ width:34%; }
+.mock-row{ display:flex; gap:8px; }
+.mock-chip{ flex:1; height:32px; border-radius:6px; background:#F3F4F6; border:1px solid var(--line); }
+.mock-chip.on{ background:var(--accent-tint); border-color:var(--accent); }
+.table-mini{ display:flex; flex-direction:column; gap:6px; }
+.table-mini .r{ display:flex; gap:8px; align-items:center; }
+.table-mini .r span{ height:9px; background:#F3F4F6; border-radius:3px; flex:1; }
+.table-mini .r .stat{ width:42px; height:15px; border-radius:4px; background:var(--accent-tint); flex:none; }
+.insight-body{ padding:22px 24px 26px; }
+.insight-body .idx{ font-size:12px; font-weight:500; color:var(--deep-ink-dim); letter-spacing:var(--track-label); display:block; margin-bottom:10px; }
+.insight-body h4{ font-size:18px; font-weight:600; letter-spacing:var(--track-h2); margin-bottom:10px; }
+.insight-body p{ font-size:14.5px; line-height:1.65; letter-spacing:var(--track-body); color:var(--deep-ink-dim); }
+
+/* ============================================================
+   DESIGN STRATEGY
+   ============================================================ */
+.strategy-item{
+  display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,4vw,56px); align-items:center;
+  padding:clamp(40px,5vw,64px) 0; border-bottom:1px solid var(--line);
+}
+.strategy-item:last-child{ border-bottom:none; }
+.strategy-item.rev .mock-frame{ order:2; }
+.strategy-item.rev .strategy-text{ order:1; }
+@media (max-width:860px){
+  .strategy-item{ grid-template-columns:1fr; }
+  .strategy-item.rev .mock-frame, .strategy-item.rev .strategy-text{ order:initial; }
+}
+.mock-frame{
+  aspect-ratio:4/3; display:flex; align-items:center; justify-content:center;
+  background:var(--blue-bg); border-radius:var(--radius-lg); padding:20px;
+  will-change:transform; transition:transform var(--dur-med) var(--ease-out);
+}
+.mock-frame-inner{ background:var(--paper); border-radius:var(--radius-md); padding:18px; width:100%; height:100%; }
+@media (hover:hover) and (pointer:fine){ .mock-frame:hover{ transform:scale(1.012); } }
+.mock-topbar{ display:flex; gap:8px; margin-bottom:14px; }
+.mock-dot{ width:7px; height:7px; border-radius:50%; background:var(--line); }
+.strategy-text .idx{
+  font-size:12.5px; font-weight:500; letter-spacing:var(--track-label);
+  color:var(--accent); display:block; margin-bottom:10px;
+}
+.strategy-text h3{ font-size:clamp(20px,2vw,24px); font-weight:600; letter-spacing:var(--track-h2); margin-bottom:16px; }
+.strategy-text h5{ font-size:12px; font-weight:600; letter-spacing:var(--track-label); text-transform:uppercase; color:var(--ink-faint); margin:20px 0 8px; }
+.strategy-text p{ font-size:15px; line-height:1.68; letter-spacing:var(--track-body); color:var(--ink-soft); }
+.solve-list li{
+  font-size:14.5px; line-height:1.62; letter-spacing:var(--track-body); color:var(--ink-soft);
+  padding-left:18px; position:relative; margin-bottom:8px;
+}
+.solve-list li::before{ content:''; position:absolute; left:0; top:8px; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+.kpi-row{ display:flex; gap:10px; margin-bottom:12px; }
+.kpi{ flex:1; background:#F5F6F8; border-radius:var(--radius-sm); padding:10px; }
+.kpi .n{ font-size:16px; font-weight:600; letter-spacing:var(--track-h2); }
+.kpi .l{ font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:var(--track-label); }
+.chart-line{ height:66px; border-radius:var(--radius-sm); background:linear-gradient(180deg, var(--accent-tint), transparent); position:relative; overflow:hidden; margin-bottom:12px; }
+.chart-line svg{ position:absolute; inset:0; }
+.calendar-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.calendar-grid div{ aspect-ratio:1; background:#F3F4F6; border-radius:4px; }
+.calendar-grid div.busy{ background:var(--pink-tag-bg); }
+.calendar-grid div.free{ background:var(--accent-tint); }
+.form-mini{ display:flex; flex-direction:column; gap:10px; }
+.form-field{ height:30px; border:1px solid var(--line); border-radius:6px; background:var(--paper); }
+.form-field.filled{ background:var(--pink-tag-bg); border-color:var(--pink-tag-ink); }
+.badge-row{ display:flex; gap:8px; margin-bottom:12px; }
+.badge{ font-size:10px; font-weight:600; letter-spacing:var(--track-label); padding:5px 10px; border-radius:var(--radius-pill); background:#F3F4F6; }
+.badge.urgent{ background:var(--pink-tag-bg); color:var(--pink-tag-ink); }
+.triage-scale{ display:flex; gap:6px; margin-bottom:14px; }
+.triage-scale div{ flex:1; height:7px; border-radius:4px; }
+.bed-grid{ display:grid; grid-template-columns:repeat(8,1fr); gap:5px; }
+.bed-grid div{ aspect-ratio:1; border-radius:4px; background:#F3F4F6; }
+.bed-grid div.occ{ background:var(--pink-tag-ink); }
+.bed-grid div.avail{ background:var(--accent); }
+
+/* ============================================================
+   TAKEAWAYS
+   ============================================================ */
+.takeaway-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+@media (max-width:860px){ .takeaway-grid{ grid-template-columns:1fr; } }
+.takeaway-card{ border:1px solid var(--line); border-radius:var(--radius-md); padding:28px 26px; }
+.takeaway-card .icon{
+  width:36px; height:36px; border-radius:var(--radius-sm); background:var(--accent-tint);
+  display:flex; align-items:center; justify-content:center; margin-bottom:18px; font-size:15px;
+}
+.takeaway-card h4{ font-size:16.5px; font-weight:600; letter-spacing:var(--track-h2); margin-bottom:10px; }
+.takeaway-card p{ font-size:14.5px; line-height:1.65; letter-spacing:var(--track-body); color:var(--ink-soft); }
+.takeaway-card p b{ color:var(--ink); }
+
+/* ============================================================
+   THANK YOU
+   ============================================================ */
+.thankyou{ text-align:center; padding:clamp(80px,10vw,140px) 24px clamp(56px,7vw,88px); }
+.thankyou h2{ font-size:clamp(32px,6vw,56px); font-weight:500; letter-spacing:var(--track-hero); }
+
+/* ============================================================
+   OTHER PROJECTS — reuses .project--card / .tag / .btn language
+   ============================================================ */
+.other-work{ padding:0 clamp(24px,5vw,72px) clamp(80px,10vw,120px); max-width:1440px; margin:0 auto; }
+.project-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(28px,3vw,44px); margin-top:36px; }
+@media (max-width:900px){ .project-grid{ grid-template-columns:1fr; } }
+.project--card{ display:flex; flex-direction:column; gap:20px; min-width:0; }
+.project__media{
+  aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; min-width:0;
+  will-change:transform; transition:transform var(--dur-med) var(--ease-out);
+}
+.project__img{ width:100%; height:100%; display:block; object-fit:contain; object-position:center; }
+@media (hover:hover) and (pointer:fine){ .project__media:hover .project__img{ transform:scale(1.015); } }
+.project__title--sm{ font-size:clamp(20px,1.9vw,25px); font-weight:600; letter-spacing:var(--track-h2); line-height:1.25; }
+.project__tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.tag{ font-size:12.5px; font-weight:500; letter-spacing:var(--track-label); padding:6px 12px; border-radius:var(--radius-pill); display:inline-block; }
+.tag--blue{ background:var(--blue-tag-bg); color:var(--blue-tag-ink); }
+.tag--lavender{ background:var(--lavender-tag-bg); color:var(--lavender-tag-ink); }
+.tag--pink{ background:var(--pink-tag-bg); color:var(--pink-tag-ink); }
+.project__desc{ font-size:15px; line-height:1.6; letter-spacing:var(--track-body); color:var(--ink-soft); }
+.btn{ display:inline-flex; align-items:center; justify-content:center; width:fit-content; padding:12px 24px; border-radius:var(--radius-pill); font-size:14px; font-weight:500; transition:background var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard); }
+.btn--primary{ background:var(--ink); color:var(--paper); }
+@media (hover:hover) and (pointer:fine){ .btn--primary:hover{ background:#2A2A2A; } }
+.btn--primary:active{ transform:scale(0.96); }
+.btn--muted{ background:transparent; color:var(--ink-faint); border:1px solid var(--line); cursor:default; }
+
+/* ============================================================
+   FOOTER (matches .footer exactly)
+   ============================================================ */
+.footer{
+  background:var(--footer-bg); color:var(--footer-ink);
+  padding:clamp(48px,6vw,72px) clamp(24px,5vw,72px);
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:24px; min-height:220px;
+}
+.footer__col{ display:flex; flex-direction:column; gap:14px; }
+.footer__col--left{ align-items:flex-start; }
+.footer__col--right{ align-items:flex-end; justify-self:end; font-size:13px; color:var(--footer-ink-dim); letter-spacing:var(--track-label); align-self:flex-end; }
+.footer__link{ display:inline-flex; align-items:center; gap:10px; font-size:14px; color:var(--footer-ink-dim); transition:color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard); }
+@media (hover:hover) and (pointer:fine){ .footer__link:hover{ color:var(--footer-ink); transform:translateX(3px); } }
+.footer__link:active{ transform:translateX(3px) scale(0.98); }
+.footer__col--center{ justify-self:center; }
+.footer__cta{ font-size:clamp(32px,4.6vw,52px); font-weight:500; letter-spacing:var(--track-hero); }
+
+@media (max-width:900px){
+  .footer{ grid-template-columns:1fr; text-align:center; justify-items:center; }
+  .footer__col--left{ align-items:center; order:2; }
+  .footer__col--center{ order:1; }
+  .footer__col--right{ align-items:center; align-self:center; order:3; }
+}
+@media (max-width:560px){
+  .nav{ flex-direction:column; align-items:flex-start; gap:16px; }
+  .nav__links{ gap:20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <a href="index.html" class="nav__name">Tejaas Tamilselvan</a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="index.html#work" class="nav__link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 6l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back
+    </a>
+    <a href="mailto:tejaastamil@gmail.com" class="nav__link nav__link--icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6.5C3 5.67157 3.67157 5 4.5 5H19.5C20.3284 5 21 5.67157 21 6.5V17.5C21 18.3284 20.3284 19 19.5 19H4.5C3.67157 19 3 18.3284 3 17.5V6.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M4 6.5L12 13L20 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Email
+    </a>
+    <a href="resume.pdf" class="nav__link nav__link--icon" download>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3V15M12 15L7 10M12 15L17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17V18C4 19.6569 5.34315 21 7 21H17C18.6569 21 20 19.6569 20 18V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Resume
+    </a>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero__eyebrow"><span class="dot"></span> Grouppal — Case Study</div>
+  <h1 class="hero__statement" data-reveal-text>Scaling merchant operations without increasing complexity.</h1>
+  <div class="hero__meta">
+    <div class="hero__meta-item"><div class="label">Role</div><div class="value">Associate Senior UX Designer</div></div>
+    <div class="hero__meta-item"><div class="label">Scope</div><div class="value">Research, UX strategy, wireframes, UI</div></div>
+    <div class="hero__meta-item"><div class="label">Client</div><div class="value">Grouppal</div></div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="section__head">
+    <div class="section__label">Context</div>
+    <h2 class="section__title">Why are we solving this problem?</h2>
+  </div>
+  <div class="card-grid">
+    <div class="info-card reveal"><span class="tag">Market</span><p><b>Merchants manage orders, inventory, customers, teams</b>, transactions and growth activities across multiple workflows.</p></div>
+    <div class="info-card reveal"><span class="tag">Product</span><p>As merchants add products, services and employees, keeping everyday operations organised becomes <b>increasingly difficult</b>.</p></div>
+    <div class="info-card reveal"><span class="tag">Impact</span><p>Grouppal needed a unified experience that could <b>bring these connected activities together</b> without overwhelming merchants.</p></div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="role-grid reveal">
+    <h3>My Role &amp; Team</h3>
+    <div class="role-desc">
+      <p><b>I'm an Associate Senior UX Designer.</b></p>
+      <p>I contributed to the end-to-end design of Grouppal's Merchant Portal, from understanding the merchant ecosystem and defining information architecture to designing workflows, interactions and reusable UI patterns.</p>
+      <div class="team-row">
+        <div class="team-card"><div class="avatar"></div><div class="name">Shivaranjani Ravisankar</div><div class="role">Lead UX Designer</div></div>
+        <div class="team-card"><div class="avatar"></div><div class="name">Aakash Raju</div><div class="role">Senior UX Designer</div></div>
+        <div class="team-card"><div class="avatar"></div><div class="name">Varun</div><div class="role">Associate Senior UX Designer</div></div>
+        <div class="team-card"><div class="avatar"></div><div class="name">Surya Prakashan</div><div class="role">Senior UI Designer</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="section__head">
+    <div class="section__label">Approach</div>
+    <h2 class="section__title">Proactive Discovery</h2>
+  </div>
+  <div class="discovery-grid">
+    <div class="discovery-card reveal">
+      <div class="icon">MAP</div>
+      <h4>Understanding the Merchant Ecosystem</h4>
+      <p>We mapped the merchant ecosystem and key workflows to understand how products, services, orders, customers, teams, and transactions connect, uncovering opportunities to simplify everyday operations.</p>
+    </div>
+    <div class="discovery-card alt reveal">
+      <div class="icon">SIM</div>
+      <h4>Identifying Opportunities to Simplify</h4>
+      <p>By looking across these workflows as one connected system, we identified common patterns and made everyday merchant operations more efficient.</p>
+    </div>
+  </div>
+</section>
+
+<section class="insights">
+  <div class="section__label">Findings</div>
+  <h2 class="section__title">Insights From Discovery</h2>
+  <div class="insights-grid">
+
+    <div class="insight-card reveal">
+      <div class="insight-mock"><div class="insight-mock-inner">
+        <div class="mock-bar blue short"></div>
+        <div class="mock-row"><div class="mock-chip on"></div><div class="mock-chip"></div><div class="mock-chip"></div></div>
+        <div class="mock-row"><div class="mock-chip"></div><div class="mock-chip on"></div></div>
+      </div></div>
+      <div class="insight-body">
+        <span class="idx">01</span>
+        <h4>Operations are interconnected</h4>
+        <p>Managing a product can lead to an order, a transaction, a customer interaction and eventually a business decision. These workflows need to work together rather than exist as isolated experiences.</p>
+      </div>
+    </div>
+
+    <div class="insight-card reveal">
+      <div class="insight-mock"><div class="insight-mock-inner">
+        <div class="mock-bar"></div>
+        <div class="table-mini">
+          <div class="r"><span></span><div class="stat"></div></div>
+          <div class="r"><span></span><div class="stat"></div></div>
+          <div class="r"><span></span><div class="stat"></div></div>
+        </div>
+      </div></div>
+      <div class="insight-body">
+        <span class="idx">02</span>
+        <h4>Unique workflows</h4>
+        <p>Grouppal supports merchants dealing with products, services or both. The experience needed enough flexibility to accommodate different business models without creating separate systems.</p>
+      </div>
+    </div>
+
+    <div class="insight-card reveal">
+      <div class="insight-mock"><div class="insight-mock-inner">
+        <div class="mock-bar short"></div>
+        <div style="flex:1; border:1.5px dashed var(--line); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center;">
+          <div style="width:24px; height:24px; border-radius:50%; background:var(--accent-tint); border:1.5px solid var(--accent);"></div>
+        </div>
+      </div></div>
+      <div class="insight-body">
+        <span class="idx">03</span>
+        <h4>More features, less complexity</h4>
+        <p>As the platform expands into teams, campaigns, offers and other business functions, the underlying experience needs to remain predictable and easy to navigate.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="section__head">
+    <div class="section__label">Execution</div>
+    <h2 class="section__title">Design Strategy</h2>
+  </div>
+
+  <div class="strategy-item reveal">
+    <div class="mock-frame"><div class="mock-frame-inner">
+      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+      <div class="kpi-row"><div class="kpi"><div class="n">1.7k</div><div class="l">Patients</div></div><div class="kpi"><div class="n">92%</div><div class="l">On time</div></div><div class="kpi"><div class="n">4.2m</div><div class="l">Wait avg</div></div></div>
+      <div class="chart-line"><svg viewBox="0 0 300 70" preserveAspectRatio="none"><polyline points="0,55 40,40 80,48 120,20 160,30 200,10 240,26 300,15" fill="none" stroke="#4A3FE0" stroke-width="2.5"/></svg></div>
+      <div class="table-mini"><div class="r"><span></span><div class="stat"></div></div><div class="r"><span></span><div class="stat"></div></div></div>
+    </div></div>
+    <div class="strategy-text">
+      <span class="idx">01 / 05</span>
+      <h3>Super Dashboard</h3>
+      <h5>The Approach</h5>
+      <p>Designed the dashboard as a central hub for business performance, operations and key actions, prioritizing the information merchants need to understand their business at a glance.</p>
+      <h5>What It Solves</h5>
+      <ul class="solve-list">
+        <li>Quick business overview — gives merchants a snapshot of key metrics and activities in one place</li>
+        <li>Faster access to key actions without digging through modules</li>
+        <li>Less navigation — brings critical information together in one view</li>
+        <li>Helped merchants act on business signals without switching between areas of the portal</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="strategy-item rev reveal">
+    <div class="mock-frame"><div class="mock-frame-inner">
+      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+      <div class="mock-bar short" style="margin-bottom:10px;"></div>
+      <div class="table-mini">
+        <div class="r"><span></span><div class="stat"></div></div>
+        <div class="r"><span></span><div class="stat"></div></div>
+        <div class="r"><span></span><div class="stat"></div></div>
+        <div class="r"><span></span><div class="stat"></div></div>
+      </div>
+    </div></div>
+    <div class="strategy-text">
+      <span class="idx">02 / 05</span>
+      <h3>Teams</h3>
+      <h5>The Approach</h5>
+      <p>Brought employee-related activities into a single workspace covering employees, attendance, leaves and tasks. Rather than treating each activity as a separate function, the experience connects the different aspects of managing a merchant's team.</p>
+      <h5>What It Solves</h5>
+      <ul class="solve-list">
+        <li>Centralised team management — employees, attendance, leaves and tasks from one workspace</li>
+        <li>Better workforce visibility and faster access to employee information</li>
+        <li>Simplified coordination by keeping team operations connected within the portal</li>
+        <li>Reduced tool switching for day-to-day workforce tasks</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="strategy-item reveal">
+    <div class="mock-frame"><div class="mock-frame-inner">
+      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+      <div class="badge-row"><span class="badge">IN STOCK</span><span class="badge urgent">LOW STOCK</span></div>
+      <div class="mock-row"><div class="mock-chip on"></div><div class="mock-chip"></div><div class="mock-chip"></div></div>
+      <div class="mock-row"><div class="mock-chip"></div><div class="mock-chip on"></div></div>
+    </div></div>
+    <div class="strategy-text">
+      <span class="idx">03 / 05</span>
+      <h3>Inventory</h3>
+      <h5>The Approach</h5>
+      <p>Created a structured inventory experience that brings product information, stock visibility and inventory actions into a single workspace, making it easier to scan while keeping key management actions accessible.</p>
+      <h5>What It Solves</h5>
+      <ul class="solve-list">
+        <li>Better inventory visibility — quickly view stock levels and product availability</li>
+        <li>Faster stock management with fewer steps to act on inventory needs</li>
+        <li>Reduced operational effort by removing the need to switch between product workflows</li>
+        <li>Made it easier to keep listings accurate as inventory changed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="strategy-item rev reveal">
+    <div class="mock-frame"><div class="mock-frame-inner">
+      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+      <div class="badge-row"><span class="badge">PRODUCT</span><span class="badge urgent">SERVICE</span></div>
+      <div class="table-mini"><div class="r"><span></span><div class="stat"></div></div><div class="r"><span></span><div class="stat" style="background:var(--pink-tag-bg);"></div></div><div class="r"><span></span><div class="stat"></div></div></div>
+    </div></div>
+    <div class="strategy-text">
+      <span class="idx">04 / 05</span>
+      <h3>Products &amp; Services</h3>
+      <h5>The Approach</h5>
+      <p>Designed the platform to accommodate merchants who operate through different business models — whether they sell products, offer services, or both. Product and service management follow familiar patterns while adapting to the needs of each offering.</p>
+      <h5>What It Solves</h5>
+      <ul class="solve-list">
+        <li>Unified product &amp; service management within one platform</li>
+        <li>Flexible business support that accommodates different merchant models</li>
+        <li>Consistent experience across product and service workflows</li>
+        <li>Reduced setup effort when merchants offered both products and services</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="strategy-item reveal">
+    <div class="mock-frame"><div class="mock-frame-inner">
+      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+      <div class="mock-bar short" style="margin-bottom:10px;"></div>
+      <div class="calendar-grid">
+        <div></div><div class="busy"></div><div></div><div class="free"></div><div></div><div class="busy"></div><div></div>
+        <div class="free"></div><div></div><div class="busy"></div><div></div><div></div><div class="free"></div><div></div>
+      </div>
+    </div></div>
+    <div class="strategy-text">
+      <span class="idx">05 / 05</span>
+      <h3>Bookings</h3>
+      <h5>The Approach</h5>
+      <p>Extended the service management experience into a dedicated booking workflow, allowing merchants to move from managing a service to managing the appointments associated with it. Key booking information and actions are organised around the merchant's operational needs.</p>
+      <h5>What It Solves</h5>
+      <ul class="solve-list">
+        <li>Centralised booking management — appointments and services in one place</li>
+        <li>Better booking visibility with a clear view of upcoming appointments</li>
+        <li>Reduced operational effort in day-to-day service scheduling</li>
+        <li>Made it easier to spot scheduling conflicts before they became problems</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<section class="section">
+  <div class="section__head">
+    <div class="section__label">Reflection</div>
+    <h2 class="section__title">My Takeaways</h2>
+  </div>
+  <div class="takeaway-grid">
+    <div class="takeaway-card reveal"><div class="icon">👥</div><h4>Team</h4><p>Working with product and engineering taught me <b>how to balance business requirements with technical constraints,</b> while clearly communicating the reasoning behind UX decisions and iterating based on feedback.</p></div>
+    <div class="takeaway-card reveal"><div class="icon">🏬</div><h4>Merchant</h4><p>Designing for merchants showed me how <b>products, services, orders, inventory, customers, teams and transactions are deeply interconnected.</b> Understanding these relationships helped me design workflows around how merchants actually run their business.</p></div>
+    <div class="takeaway-card reveal"><div class="icon">✎</div><h4>Design</h4><p>Working across multiple modules strengthened my ability to <b>design scalable UX patterns rather than isolated screens.</b> Establishing consistent navigation, tables, forms and interaction patterns helped create a cohesive experience across the entire merchant portal.</p></div>
+  </div>
+</section>
+
+<section class="thankyou">
+  <h2 class="reveal">Thank You</h2>
+</section>
+
+<section class="other-work">
+  <div class="section__head">
+    <div class="section__label">Continue Browsing</div>
+    <h2 class="section__title">Other Projects</h2>
+  </div>
+  <div class="project-grid">
+
+    <article class="project--card reveal" data-tilt>
+      <div class="project__media">
+        <img src="assets/image/naruvi-dashboard.png" alt="Naruvi Hospitals front desk dashboard showing out-patient registration, today's overview and peak hours chart" class="project__img" loading="lazy" />
+      </div>
+      <h2 class="project__title--sm">How Fragmented Front Desk Interfaces Cripple The Patient Experience</h2>
+      <ul class="project__tags"><li class="tag tag--blue">Front Desk Management</li><li class="tag tag--blue">Healthcare</li><li class="tag tag--blue">B2B</li></ul>
+      <p class="project__desc">An end-to-end front desk system that cuts patient check-in friction, eases wait-time anxiety, and keeps clinical workflows moving for hospital staff.</p>
+      <a href="naruvi-case-study.html" class="btn btn--primary"><span>Read</span></a>
+    </article>
+
+    <article class="project--card reveal" data-tilt>
+      <div class="project__media">
+        <img src="assets/image/superapp-mobile.png" alt="Mobile super application showing home screen with categories and search results across products and stores" class="project__img" loading="lazy" />
+      </div>
+      <h2 class="project__title--sm">Replacing Platform-Hopping With One Place To Shop</h2>
+      <ul class="project__tags"><li class="tag tag--pink">E-Comm</li><li class="tag tag--pink">B2C</li></ul>
+      <p class="project__desc">A unified super app that brings products and services together, so people can discover, compare, and book everything without switching apps.</p>
+      <a href="superapp-case-study.html" class="btn btn--primary"><span>Read</span></a>
+    </article>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__col footer__col--left">
+    <a href="resume.pdf" class="footer__link" download>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 8H16M8 12H16M8 16H12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Resume
+    </a>
+    <a href="mailto:tejaastamil@gmail.com" class="footer__link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6.5C3 5.67157 3.67157 5 4.5 5H19.5C20.3284 5 21 5.67157 21 6.5V17.5C21 18.3284 20.3284 19 19.5 19H4.5C3.67157 19 3 18.3284 3 17.5V6.5Z" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5L12 13L20 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      tejaastamil@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/tejaas-tamilselvan" class="footer__link" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M8 10V17M8 7.5V7.51M12 17V13C12 11.6193 13.1193 10.5 14.5 10.5C15.8807 10.5 17 11.6193 17 13V17M12 10.5V17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      tejaas-tamilselvan
+    </a>
+  </div>
+  <div class="footer__col footer__col--center"><span class="footer__cta">Let's design</span></div>
+  <div class="footer__col footer__col--right"><span>2026 Tejaas Tamilselvan</span></div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  function initHeroReveal(){
+    var el = document.querySelector("[data-reveal-text]");
+    if(!el) return;
+    var words = el.textContent.trim().split(/\s+/);
+    if(reduceMotion) return;
+    el.innerHTML = words.map(function(word, i){
+      var delay = 40 + i * 22;
+      return '<span class="word" style="animation-delay:' + delay + 'ms">' + word + '</span>';
+    }).join(" ");
+  }
+
+  function initScrollReveal(){
+    var items = document.querySelectorAll(".reveal");
+    if(!items.length) return;
+    if(reduceMotion || !("IntersectionObserver" in window)){
+      items.forEach(function(el){ el.classList.add("is-visible"); });
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+    items.forEach(function(el){ observer.observe(el); });
+  }
+
+  function initTilt(){
+    if(!canHover || reduceMotion) return;
+    var cards = document.querySelectorAll("[data-tilt] .project__media, .strategy-item .mock-frame");
+    cards.forEach(function(card){
+      var bounds; var raf = null;
+      function onMove(e){
+        if(raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(function(){
+          bounds = bounds || card.getBoundingClientRect();
+          var x = (e.clientX - bounds.left) / bounds.width - 0.5;
+          var y = (e.clientY - bounds.top) / bounds.height - 0.5;
+          var rotateX = (y * -4).toFixed(2);
+          var rotateY = (x * 4).toFixed(2);
+          card.style.transform = "perspective(900px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg) scale(1.008)";
+        });
+      }
+      function onEnter(){ bounds = card.getBoundingClientRect(); card.style.transition = "transform 120ms ease-out"; }
+      function onLeave(){
+        card.style.transition = "transform 420ms cubic-bezier(.16,1,.3,1)";
+        card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
+        bounds = null;
+      }
+      card.addEventListener("pointerenter", onEnter);
+      card.addEventListener("pointermove", onMove);
+      card.addEventListener("pointerleave", onLeave);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    initHeroReveal();
+    initScrollReveal();
+    initTilt();
+  });
+})();
+</script>
+
+</body>
+</html>
