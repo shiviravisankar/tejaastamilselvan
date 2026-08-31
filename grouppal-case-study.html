@@ -255,6 +255,7 @@ body{
 .insight-card{ background:var(--deep-card); border:1px solid var(--deep-line); border-radius:var(--radius-md); overflow:hidden; }
 .insight-mock{ aspect-ratio:4/3; padding:16px; }
 .insight-mock-inner{ height:100%; background:var(--paper); border-radius:var(--radius-sm); padding:14px; display:flex; flex-direction:column; gap:8px; }
+.insight-mock-img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:var(--radius-sm); }
 .mock-bar{ height:8px; border-radius:3px; background:var(--line); }
 .mock-bar.blue{ background:var(--accent); width:55%; }
 .mock-bar.short{ width:34%; }
@@ -290,6 +291,7 @@ body{
   will-change:transform; transition:transform var(--dur-med) var(--ease-out);
 }
 .mock-frame-inner{ background:var(--paper); border-radius:var(--radius-md); padding:18px; width:100%; height:100%; }
+.mock-frame-img{ width:100%; height:100%; object-fit:contain; display:block; }
 @media (hover:hover) and (pointer:fine){ .mock-frame:hover{ transform:scale(1.012); } }
 .mock-topbar{ display:flex; gap:8px; margin-bottom:14px; }
 .mock-dot{ width:7px; height:7px; border-radius:50%; background:var(--line); }
@@ -455,10 +457,10 @@ body{
       <p><b>I'm an Associate Senior UX Designer.</b></p>
       <p>I contributed to the end-to-end design of Grouppal's Merchant Portal, from understanding the merchant ecosystem and defining information architecture to designing workflows, interactions and reusable UI patterns.</p>
       <div class="team-row">
-        <div class="team-card"><div class="avatar"></div><div class="name">Shivaranjani Ravisankar</div><div class="role">Lead UX Designer</div></div>
+        <div class="team-card"><div class="avatar"></div><div class="name">Shivi Ravisankar</div><div class="role">Lead UX Designer</div></div>
         <div class="team-card"><div class="avatar"></div><div class="name">Aakash Raju</div><div class="role">Senior UX Designer</div></div>
-        <div class="team-card"><div class="avatar"></div><div class="name">Varun</div><div class="role">Associate Senior UX Designer</div></div>
-        <div class="team-card"><div class="avatar"></div><div class="name">Surya Prakashan</div><div class="role">Senior UI Designer</div></div>
+        <div class="team-card"><div class="avatar"></div><div class="name">Varun KR</div><div class="role">Associate Senior UX Designer</div></div>
+        <div class="team-card"><div class="avatar"></div><div class="name">Krishanthan S</div><div class="role">Senior UI Designer</div></div>
       </div>
     </div>
   </div>
@@ -489,11 +491,9 @@ body{
   <div class="insights-grid">
 
     <div class="insight-card reveal">
-      <div class="insight-mock"><div class="insight-mock-inner">
-        <div class="mock-bar blue short"></div>
-        <div class="mock-row"><div class="mock-chip on"></div><div class="mock-chip"></div><div class="mock-chip"></div></div>
-        <div class="mock-row"><div class="mock-chip"></div><div class="mock-chip on"></div></div>
-      </div></div>
+      <div class="insight-mock">
+        <img src="assets/image/grouppal/insight-operations-interconnected.png" alt="Operations are interconnected insight — connected product, order and transaction flows" class="insight-mock-img" loading="lazy" />
+      </div>
       <div class="insight-body">
         <span class="idx">01</span>
         <h4>Operations are interconnected</h4>
@@ -502,14 +502,9 @@ body{
     </div>
 
     <div class="insight-card reveal">
-      <div class="insight-mock"><div class="insight-mock-inner">
-        <div class="mock-bar"></div>
-        <div class="table-mini">
-          <div class="r"><span></span><div class="stat"></div></div>
-          <div class="r"><span></span><div class="stat"></div></div>
-          <div class="r"><span></span><div class="stat"></div></div>
-        </div>
-      </div></div>
+      <div class="insight-mock">
+        <img src="assets/image/grouppal/insight-unique-workflows.png" alt="Unique workflows insight — flexible product and service business models" class="insight-mock-img" loading="lazy" />
+      </div>
       <div class="insight-body">
         <span class="idx">02</span>
         <h4>Unique workflows</h4>
@@ -518,12 +513,9 @@ body{
     </div>
 
     <div class="insight-card reveal">
-      <div class="insight-mock"><div class="insight-mock-inner">
-        <div class="mock-bar short"></div>
-        <div style="flex:1; border:1.5px dashed var(--line); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center;">
-          <div style="width:24px; height:24px; border-radius:50%; background:var(--accent-tint); border:1.5px solid var(--accent);"></div>
-        </div>
-      </div></div>
+      <div class="insight-mock">
+        <img src="assets/image/grouppal/insight-more-features-less-complexity.png" alt="More features, less complexity insight — predictable navigation as the platform expands" class="insight-mock-img" loading="lazy" />
+      </div>
       <div class="insight-body">
         <span class="idx">03</span>
         <h4>More features, less complexity</h4>
@@ -541,12 +533,9 @@ body{
   </div>
 
   <div class="strategy-item reveal">
-    <div class="mock-frame"><div class="mock-frame-inner">
-      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
-      <div class="kpi-row"><div class="kpi"><div class="n">1.7k</div><div class="l">Patients</div></div><div class="kpi"><div class="n">92%</div><div class="l">On time</div></div><div class="kpi"><div class="n">4.2m</div><div class="l">Wait avg</div></div></div>
-      <div class="chart-line"><svg viewBox="0 0 300 70" preserveAspectRatio="none"><polyline points="0,55 40,40 80,48 120,20 160,30 200,10 240,26 300,15" fill="none" stroke="#4A3FE0" stroke-width="2.5"/></svg></div>
-      <div class="table-mini"><div class="r"><span></span><div class="stat"></div></div><div class="r"><span></span><div class="stat"></div></div></div>
-    </div></div>
+    <div class="mock-frame">
+      <img src="assets/image/grouppal/super-dashboard.png" alt="Super Dashboard screen — business performance, operations and key actions in one hub" class="mock-frame-img" loading="lazy" />
+    </div>
     <div class="strategy-text">
       <span class="idx">01 / 05</span>
       <h3>Super Dashboard</h3>
@@ -563,16 +552,9 @@ body{
   </div>
 
   <div class="strategy-item rev reveal">
-    <div class="mock-frame"><div class="mock-frame-inner">
-      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
-      <div class="mock-bar short" style="margin-bottom:10px;"></div>
-      <div class="table-mini">
-        <div class="r"><span></span><div class="stat"></div></div>
-        <div class="r"><span></span><div class="stat"></div></div>
-        <div class="r"><span></span><div class="stat"></div></div>
-        <div class="r"><span></span><div class="stat"></div></div>
-      </div>
-    </div></div>
+    <div class="mock-frame">
+      <img src="assets/image/grouppal/teams.png" alt="Teams screen — employees, attendance, leaves and tasks in one workspace" class="mock-frame-img" loading="lazy" />
+    </div>
     <div class="strategy-text">
       <span class="idx">02 / 05</span>
       <h3>Teams</h3>
@@ -589,12 +571,9 @@ body{
   </div>
 
   <div class="strategy-item reveal">
-    <div class="mock-frame"><div class="mock-frame-inner">
-      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
-      <div class="badge-row"><span class="badge">IN STOCK</span><span class="badge urgent">LOW STOCK</span></div>
-      <div class="mock-row"><div class="mock-chip on"></div><div class="mock-chip"></div><div class="mock-chip"></div></div>
-      <div class="mock-row"><div class="mock-chip"></div><div class="mock-chip on"></div></div>
-    </div></div>
+    <div class="mock-frame">
+      <img src="assets/image/grouppal/inventory.png" alt="Inventory screen — stock visibility and product management" class="mock-frame-img" loading="lazy" />
+    </div>
     <div class="strategy-text">
       <span class="idx">03 / 05</span>
       <h3>Inventory</h3>
@@ -611,11 +590,9 @@ body{
   </div>
 
   <div class="strategy-item rev reveal">
-    <div class="mock-frame"><div class="mock-frame-inner">
-      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
-      <div class="badge-row"><span class="badge">PRODUCT</span><span class="badge urgent">SERVICE</span></div>
-      <div class="table-mini"><div class="r"><span></span><div class="stat"></div></div><div class="r"><span></span><div class="stat" style="background:var(--pink-tag-bg);"></div></div><div class="r"><span></span><div class="stat"></div></div></div>
-    </div></div>
+    <div class="mock-frame">
+      <img src="assets/image/grouppal/products-services.png" alt="Products & Services screen — unified management for both offering types" class="mock-frame-img" loading="lazy" />
+    </div>
     <div class="strategy-text">
       <span class="idx">04 / 05</span>
       <h3>Products &amp; Services</h3>
@@ -632,14 +609,9 @@ body{
   </div>
 
   <div class="strategy-item reveal">
-    <div class="mock-frame"><div class="mock-frame-inner">
-      <div class="mock-topbar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
-      <div class="mock-bar short" style="margin-bottom:10px;"></div>
-      <div class="calendar-grid">
-        <div></div><div class="busy"></div><div></div><div class="free"></div><div></div><div class="busy"></div><div></div>
-        <div class="free"></div><div></div><div class="busy"></div><div></div><div></div><div class="free"></div><div></div>
-      </div>
-    </div></div>
+    <div class="mock-frame">
+      <img src="assets/image/grouppal/bookings.png" alt="Bookings screen — dedicated appointment scheduling workflow" class="mock-frame-img" loading="lazy" />
+    </div>
     <div class="strategy-text">
       <span class="idx">05 / 05</span>
       <h3>Bookings</h3>
